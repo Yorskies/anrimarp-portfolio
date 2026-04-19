@@ -13,7 +13,8 @@ function initTypewriter() {
   const roles = [
     'Fullstack Developer',
     'System Administrator',
-    'Software Engineer',
+    'DevOps Engineer',
+    'Software Architect',
   ];
   let roleIndex = 0;
   let charIndex = 0;

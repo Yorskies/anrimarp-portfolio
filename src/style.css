@@ -1,5 +1,6 @@
 /* =============================================================
-   PORTFOLIO — Main Stylesheet
+   PORTFOLIO — Terminal Brutalist Stylesheet
+   "Minimalist Brutalism meets Retro-Terminal"
    Tailwind CSS v3 with PostCSS
    ============================================================= */
 
@@ -9,90 +10,201 @@
 
 
 /* =============================================================
-   BASE LAYER — Resets & Theme Transitions
+   BASE LAYER — Terminal Reset & Global Defaults
    ============================================================= */
 @layer base {
   html {
-    @apply antialiased;
+    @apply antialiased scroll-smooth;
   }
 
+  /* Always dark terminal — no light mode */
   body {
-    @apply font-sans bg-surface text-primary transition-colors duration-500 ease-in-out;
+    @apply font-mono bg-terminal-bg text-terminal-text;
+    font-feature-settings: 'liga' 0;
   }
 
-  .dark body {
-    @apply bg-primary text-surface;
-  }
-
-  /* Smooth theme transition for all elements */
-  *, *::before, *::after {
-    @apply transition-colors duration-300;
-  }
-
-  /* Selection highlight */
+  /* Selection highlight — terminal green */
   ::selection {
-    @apply bg-accent/20 text-accent-deep;
+    background-color: #10b981;
+    color: #09090b;
   }
 
-  .dark ::selection {
-    @apply bg-accent/30 text-accent-glow;
+  /* Force all border-radius to 0 globally */
+  *, *::before, *::after {
+    border-radius: 0 !important;
+  }
+
+  /* Headings use pixel font */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-pixel;
+  }
+
+  /* Links default behavior */
+  a {
+    @apply text-terminal-text transition-colors duration-200;
+  }
+  a:hover {
+    @apply text-terminal-green;
   }
 }
 
 
 /* =============================================================
-   COMPONENTS LAYER — Reusable component styles
+   COMPONENTS LAYER — Brutalist Terminal Components
    ============================================================= */
 @layer components {
-  /* Glassmorphism effect */
+  /* --- Terminal Panel / Card --- */
+  .terminal-card {
+    @apply relative overflow-hidden p-6 md:p-8
+           bg-terminal-panel
+           border border-terminal-border
+           transition-all duration-300;
+  }
+  .terminal-card:hover {
+    @apply border-terminal-green shadow-glow;
+  }
+
+  /* --- Glass replaced with terminal header bar --- */
   .glass {
-    @apply bg-surface/70 dark:bg-primary/70 backdrop-blur-xl border border-border-light/50 dark:border-border/30;
+    @apply bg-terminal-bg/95 backdrop-blur-sm
+           border-b-2 border-terminal-border;
   }
 
-  /* Bento card base styles */
+  /* --- Bento card → Terminal card (legacy compat) --- */
   .bento-card {
-    @apply relative overflow-hidden rounded-bento p-6 md:p-8
-           bg-white dark:bg-primary-light
-           border border-border-light dark:border-border/50
-           shadow-bento dark:shadow-bento-dark
-           hover:shadow-glow-lg dark:hover:shadow-glow-lg
-           hover:-translate-y-1
-           transition-all duration-500 ease-out;
+    @apply relative overflow-hidden p-6 md:p-8
+           bg-terminal-panel
+           border border-terminal-border
+           hover:border-terminal-green
+           hover:shadow-glow
+           transition-all duration-300;
   }
 
-  /* Accent gradient text */
+  /* --- Gradient text → Terminal green solid --- */
   .gradient-text {
-    @apply bg-gradient-to-r from-accent via-accent-glow to-accent-deep
-           bg-clip-text text-transparent;
+    @apply text-terminal-green;
+    background: none;
+    -webkit-background-clip: unset;
+    -webkit-text-fill-color: unset;
+    background-clip: unset;
+  }
+
+  /* --- Terminal prompt prefix --- */
+  .terminal-prompt::before {
+    content: '> ';
+    @apply text-terminal-green font-mono;
+  }
+
+  /* --- Section header decorator --- */
+  .section-label {
+    @apply font-pixel text-terminal-green text-pixel-sm
+           uppercase tracking-widest;
+  }
+
+  /* --- Bracketed tag (e.g., [SYSTEM_ARCHITECTURE]) --- */
+  .bracket-tag {
+    @apply inline-block font-mono text-xs
+           text-terminal-amber border border-terminal-amber/40
+           px-2 py-0.5
+           transition-all duration-200;
+  }
+  .bracket-tag:hover {
+    @apply bg-terminal-amber/10 border-terminal-amber;
+  }
+
+  /* --- System status dot --- */
+  .status-dot {
+    @apply inline-block w-2 h-2 bg-terminal-green;
+  }
+  .status-dot.warning {
+    @apply bg-terminal-amber;
+  }
+
+  /* --- Terminal button --- */
+  .terminal-btn {
+    @apply inline-flex items-center gap-2 px-6 py-3
+           font-mono text-sm font-medium
+           border-2 border-terminal-green text-terminal-green
+           bg-transparent
+           hover:bg-terminal-green hover:text-terminal-bg
+           transition-all duration-200;
+  }
+  .terminal-btn-solid {
+    @apply inline-flex items-center gap-2 px-6 py-3
+           font-mono text-sm font-medium
+           border-2 border-terminal-green
+           bg-terminal-green text-terminal-bg
+           hover:bg-transparent hover:text-terminal-green
+           transition-all duration-200;
+  }
+
+  /* --- Scanline overlay effect (subtle CRT) --- */
+  .scanline-overlay {
+    @apply pointer-events-none fixed inset-0 z-[100];
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(16, 185, 129, 0.015) 2px,
+      rgba(16, 185, 129, 0.015) 4px
+    );
   }
 }
 
 
 /* =============================================================
-   UTILITIES LAYER — Scrollbar, cursor, reveal animation
+   UTILITIES LAYER — Scrollbar, cursor, reveal
    ============================================================= */
 @layer utilities {
-  /* Custom scrollbar */
+  /* Custom scrollbar — terminal style */
   ::-webkit-scrollbar {
-    width: 8px;
+    width: 6px;
   }
   ::-webkit-scrollbar-track {
-    @apply bg-surface dark:bg-primary;
+    background: #09090b;
   }
   ::-webkit-scrollbar-thumb {
-    @apply bg-muted/40 rounded-full hover:bg-muted/60;
+    background: #3f3f46;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #10b981;
   }
 
-  /* Typewriter cursor blink */
+  /* Typewriter cursor blink — terminal green block */
   .typewriter-cursor::after {
-    content: '|';
-    @apply animate-pulse text-accent ml-0.5;
+    content: '█';
+    @apply animate-blink text-terminal-green ml-0.5;
   }
 
-  /* Scroll reveal — revealed state
-     (previously injected via JS, now static) */
+  /* Scroll reveal */
   .revealed {
     opacity: 1 !important;
     transform: translateY(0) !important;
+  }
+
+  /* Grayscale image filter (default on, color on hover) */
+  .img-terminal {
+    @apply grayscale transition-all duration-300;
+  }
+  .img-terminal:hover {
+    @apply grayscale-0;
+  }
+
+  /* Terminal text glow on hover */
+  .text-glow:hover {
+    text-shadow: 0 0 8px rgba(16, 185, 129, 0.5);
+  }
+
+  /* Pixel border decoration */
+  .pixel-border {
+    border-style: solid;
+    border-width: 2px;
+    border-image: repeating-linear-gradient(
+      90deg,
+      #3f3f46 0px,
+      #3f3f46 4px,
+      transparent 4px,
+      transparent 8px
+    ) 2;
   }
 }
